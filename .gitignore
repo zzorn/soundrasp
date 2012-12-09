@@ -12,6 +12,10 @@
 *.la
 *.a
 
+# Project files
+*.layout
+*.depend
+
 # Backups and temps files
 *.*~
 

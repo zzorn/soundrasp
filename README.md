@@ -1,4 +1,6 @@
 soundrasp
 =========
 
-Modular sound synthetizator, with physical controller.
+Modular sound synthetizator, with designs for a physical controller.
+
+

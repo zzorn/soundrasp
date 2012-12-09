@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #endif
 
-#include <iostream>
-
 #include <SDL/SDL.h>
 #include <SDL/SDL_audio.h>
 
@@ -53,7 +51,7 @@ void setupSound() {
 
     // Open audio for playing with desired parameters
     if (SDL_OpenAudio(&desiredSpec, &obtainedSpec) != 0) {
-        cerr << "Could not open audio device." << flush;
+        printf("Could not open audio device.");
         exit(1);
     }
 
@@ -74,7 +72,7 @@ void endChangeParams() {
 
 
 int main ( int argc, char** argv ) {
-    cout << "Starting soundrasp\n" << flush;
+    printf("Starting soundrasp\n");
 
     // initialize SDL video
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
@@ -140,7 +138,7 @@ int main ( int argc, char** argv ) {
 
     SDL_CloseAudio();
 
-    cout << "Soundrasp closed\n" << flush;
+    printf("Soundrasp closed\n");
     return 0;
 }
 

@@ -19,4 +19,7 @@
 # Backups and temps files
 *.*~
 
+# bin folder
+bin/
+obj/
 

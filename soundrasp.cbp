@@ -26,7 +26,6 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
-		<Unit filename="Module.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

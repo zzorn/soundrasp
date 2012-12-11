@@ -16,6 +16,8 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="libSDL" />
+					<Add library="libSDL_gfx" />
 				</Linker>
 			</Target>
 		</Build>

@@ -7,6 +7,7 @@
 #include <string>
 #include <SDL/SDL.h>
 #include <SDL/SDL_audio.h>
+#include <SDL/SDL_gfxPrimitives.h>
 
 #include <ctime>
 
@@ -28,6 +29,9 @@ long timeStep = 0;
 
 double elapsedTime = 0.0;
 
+SequenceDisplay testDisplay = SequenceDisplay(10, 10, DISPLAY_W - 20, 60);
+SequenceDisplay testDisplay2 = SequenceDisplay(10, 80, DISPLAY_W - 20, 60, 0.01);
+
 
 Module* modules[MODULE_COUNT];
 
@@ -40,6 +44,9 @@ void generateSample(double deltaTime, double time, long step) {
     for (int i = 0; i < MODULE_COUNT; i++) {
         modules[i]->updateValue();
     }
+
+    testDisplay.addDataPoint(modules[0]->moduleValue);
+    testDisplay2.addDataPoint(modules[1]->moduleValue);
 }
 
 
@@ -178,7 +185,10 @@ int main ( int argc, char** argv ) {
         // DRAWING STARTS HERE
 
         // clear screen
-        SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+        //SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
+
+        testDisplay.draw(screen);
+        testDisplay2.draw(screen);
 
         // DRAWING ENDS HERE
 

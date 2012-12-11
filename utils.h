@@ -28,4 +28,31 @@ long xorshiftRandomLong(long seed) {
 };
 
 
+int clampInt(int v, int minValue, int maxValue) {
+    if (v < minValue) return minValue;
+    else if (v > maxValue) return maxValue;
+    return v;
+}
+
+double clampZeroToOne(double v) {
+    if (v < 0) return 0;
+    else if (v > 1) return 1;
+    return v;
+}
+
+Uint32 rgbaInt(int r, int g, int b, int a) {
+    return ((r & 0xFF) << 24) |
+           ((g & 0xFF) << 16) |
+           ((b & 0xFF) << 8) |
+           ((a & 0xFF) << 0);
+}
+
+Uint32 rgbaColor(double r, double g, double b, double a) {
+    return rgbaInt(255*clampZeroToOne(r),
+                   255*clampZeroToOne(g),
+                   255*clampZeroToOne(b),
+                   255*clampZeroToOne(a));
+}
+
+
 #endif

@@ -60,7 +60,7 @@ double randomDouble() {
 
 // Module functions
 double sineWaveFunc(double *params, double *data, double delta, double time, long step) {
-  return params[OFFS] + params[AMP] * sin(params[PHASE] + time * Tau * params[FREQ]);
+  return params[OFFS] + params[AMP] * sin(params[PHASE] * Tau + time * Tau * params[FREQ]);
 }
 
 double whiteNoiseFunc(double *params, double *data, double delta, double time, long step) {

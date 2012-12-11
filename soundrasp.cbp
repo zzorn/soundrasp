@@ -26,7 +26,13 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
+		<Unit filename="Display.h" />
+		<Unit filename="Module.h" />
+		<Unit filename="ModuleType.h" />
+		<Unit filename="ModuleTypes.h" />
+		<Unit filename="constants.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="utils.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

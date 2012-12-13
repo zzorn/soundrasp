@@ -32,7 +32,7 @@ double elapsedTime = 0.0;
 const int viewH = DISPLAY_H / 4;
 SequenceDisplay testDisplay1 = SequenceDisplay(0, viewH*0, DISPLAY_W, viewH, 1, 10);
 SequenceDisplay testDisplay2 = SequenceDisplay(0, viewH*1, DISPLAY_W, viewH, 0.01, 10);
-SequenceDisplay testDisplay3 = SequenceDisplay(0, viewH*2, DISPLAY_W, viewH, 0.01, 10);
+SequenceDisplay testDisplay3 = SequenceDisplay(0, viewH*2, DISPLAY_W, viewH, 0.1, 10);
 
 
 Module* modules[MODULE_COUNT];

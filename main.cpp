@@ -29,8 +29,10 @@ long timeStep = 0;
 
 double elapsedTime = 0.0;
 
-SequenceDisplay testDisplay = SequenceDisplay(10, 10, DISPLAY_W - 20, 60);
-SequenceDisplay testDisplay2 = SequenceDisplay(10, 80, DISPLAY_W - 20, 60, 0.01);
+const int viewH = DISPLAY_H / 4;
+SequenceDisplay testDisplay1 = SequenceDisplay(0, viewH*0, DISPLAY_W, viewH, 1, 10);
+SequenceDisplay testDisplay2 = SequenceDisplay(0, viewH*1, DISPLAY_W, viewH, 0.01, 10);
+SequenceDisplay testDisplay3 = SequenceDisplay(0, viewH*2, DISPLAY_W, viewH, 0.01, 10);
 
 
 Module* modules[MODULE_COUNT];
@@ -45,8 +47,9 @@ void generateSample(double deltaTime, double time, long step) {
         modules[i]->updateValue();
     }
 
-    testDisplay.addDataPoint(modules[0]->moduleValue);
+    testDisplay1.addDataPoint(modules[0]->moduleValue);
     testDisplay2.addDataPoint(modules[1]->moduleValue);
+    testDisplay3.addDataPoint(modules[2]->moduleValue);
 }
 
 
@@ -120,22 +123,23 @@ int main ( int argc, char** argv ) {
         modules[i] = new Module();
     }
 
+    modules[0]->setType(OSCILLATOR_TYPE);
+    //modules[0]->setParameterSource(AMP, 2);
+    modules[0]->setParameterSource(FREQ, 1);
+    //modules[0]->setParameterValue(FREQ, 220);
+    modules[0]->setParameterValue(AMP, 1);
+    modules[0]->setParameterValue(OFFS, 0);
+
     modules[1]->setType(OSCILLATOR_TYPE);
     modules[1]->setParameterValue(FREQ, 1);
     modules[1]->setParameterValue(AMP, 50);
-    modules[1]->setParameterValue(OFFS, 150);
+    modules[1]->setParameterValue(OFFS, 200);
 
     modules[2]->setType(OSCILLATOR_TYPE);
     modules[2]->setParameterValue(FREQ, 1);
     modules[2]->setParameterValue(AMP, 0.5);
     modules[2]->setParameterValue(OFFS, 0.5);
 
-    modules[0]->setType(OSCILLATOR_TYPE);
-    modules[0]->setParameterSource(AMP, 2);
-    modules[0]->setParameterSource(FREQ, 1);
-    //modules[0]->setParameterValue(FREQ, 220);
-    modules[0]->setParameterValue(AMP, 1);
-    modules[0]->setParameterValue(OFFS, 0);
 
     // initialize SDL video
     if ( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
@@ -187,8 +191,9 @@ int main ( int argc, char** argv ) {
         // clear screen
         //SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
-        testDisplay.draw(screen);
+        testDisplay1.draw(screen);
         testDisplay2.draw(screen);
+        testDisplay3.draw(screen);
 
         // DRAWING ENDS HERE
 

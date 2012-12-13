@@ -22,12 +22,43 @@ const int OFFS  = 3;
 
 
 // Module functions
+const int SINE_WAVE_PHASE_DATA = 0;
 double sineWaveFunc(double *params, double *data, double delta, double time, long step) {
-  //return params[OFFS] + params[AMP] * sin(params[PHASE] * Tau + time * Tau * params[FREQ]);
-  return params[AMP] * sin(/*params[PHASE] * Tau + */ time * Tau * params[FREQ]);
+  double phase = data[SINE_WAVE_PHASE_DATA];
+
+  // Update phase with time delta * frequency
+  phase += delta * params[FREQ];
+
+  // Keep phase in a limited range to preserve the floating point accuracy
+  if (phase > 1.0) phase -= 1.0;
+  if (phase > 10.0) phase -= 10.0;
+  if (phase > 1000.0) phase -= 1000.0;
+
+  // Store phase for next time
+  data[SINE_WAVE_PHASE_DATA] = phase;
+
+  // Calculate signal using the current phase and the phase offset, then amplify and offset it
+  return params[OFFS] + params[AMP] * sin(Tau * (phase + params[PHASE]));
 }
 
+const int WHITE_NOISE_DURATION_DATA = 0;
 double whiteNoiseFunc(double *params, double *data, double delta, double time, long step) {
+
+/* TODO: Similar fix to white noise as the phase in sinewave.
+    double phase = data[WHITE_NOISE_DURATION_DATA];
+
+    // Update phase with time delta * frequency
+    phase += delta * params[FREQ];
+
+    // Keep phase in a limited range to preserve the floating point accuracy
+    if (phase > 1.0) phase -= 1.0;
+    if (phase > 10.0) phase -= 10.0;
+    if (phase > 1000.0) phase -= 1000.0;
+
+    // Store phase for next time
+    data[WHITE_NOISE_DURATION_DATA] = phase;
+*/
+
     // Get previous value and the time it was calculated at
     double value      = data[0];
     double changeTime = data[1];

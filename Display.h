@@ -19,6 +19,9 @@ class SequenceDisplay {
     int w;
     int h;
 
+    int marginX;
+    int marginY;
+
     int dataSize;
     double *data;
     int dataStart;
@@ -30,6 +33,7 @@ class SequenceDisplay {
 
     Uint32 bgColor;
     Uint32 fgColor;
+    Uint32 frameColor;
 
     SequenceDisplay(int x_, int y_, int w_, int h_, double dataScale_ = 1.0, long updateStep_ = 1) {
         x = x_;
@@ -37,8 +41,12 @@ class SequenceDisplay {
         w = w_;
         h = h_;
 
+        marginX = 2;
+        marginY = 2;
+
         setLineColor(1, 0, 0);
         setBackgroundColor(0.2, 0.2, 0.2);
+        frameColor = rgbaColor(0, 0, 0, 1);
 
         dataSize = w;
         data = new double[dataSize];
@@ -99,7 +107,8 @@ class SequenceDisplay {
     int getYPosAt(int x) {
         //double relativePos = (double)x / w;
         double data = dataScale * getDataAt(x);
-        int y = 0.5 * h + data * 0.5 * h;
+        int vh = h - marginY * 2;
+        int y = marginY + 0.5 * vh + data * 0.5 * vh;
         return clampInt(y, 0, h);
     }
 
@@ -115,6 +124,9 @@ class SequenceDisplay {
             aalineColor(surface, x + tx - 1, prevY, x + tx, currentY, fgColor);
             prevY = currentY;
         }
+
+        // Draw background
+        rectangleColor(surface, x, y, x + w-1, y + h-1, frameColor);
     }
 
 };

@@ -4,6 +4,8 @@
 #include <string>
 #include <ctime>
 #include <math.h>
+#include <iostream>
+#include <sstream>
 
 #include "ModuleTypes.h"
 #include "utils.h"
@@ -15,14 +17,19 @@ using namespace std;
 
 class Module {
   public:
+    int moduleNumber;
     double parameterValues[PARAM_COUNT];
     int parameterSourceModules[PARAM_COUNT];
     double dataValues[DATA_COUNT];
     ModuleType &moduleType;
     double moduleValue;
     double newModuleValue;
+    string moduleName;
 
-    Module() : moduleType(OSCILLATOR_TYPE) {
+    Module(int moduleNumber_) : moduleType(OSCILLATOR_TYPE) {
+
+        moduleNumber = moduleNumber_;
+        moduleName = "";
 
         // Init
 
@@ -52,6 +59,8 @@ class Module {
 
         moduleValue = 0.0;
         newModuleValue = 0.0;
+
+        moduleName.clear();
     }
 
     double calculate(Module **allModules, double delta, double time, long step) {
@@ -82,6 +91,16 @@ class Module {
         if (param >= 0 && param < PARAM_COUNT) {
             parameterSourceModules[param] = sourceModule;
         }
+    }
+
+    string getName() {
+        if (moduleName.length() <= 0) {
+            std::stringstream sstm;
+            sstm << moduleType.name << " " << moduleNumber;
+            moduleName = sstm.str();
+        }
+
+        return moduleName;
     }
 
 };

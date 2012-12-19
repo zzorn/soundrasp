@@ -29,14 +29,15 @@ static const int OUTPUT_MODULE = 0;
 
 
 /** Width of window */
-static const int DISPLAY_W = 320;
+static const int DISPLAY_W = 800;
 
 /** Height of window */
-static const int DISPLAY_H = 240;
+static const int DISPLAY_H = 600;
 
 /** Bits per pixel used for the display. */
 static const int DISPLAY_BPP = 32;
 
+static const int DISPLAY_COLUMNS = 4;
 
 
 #endif

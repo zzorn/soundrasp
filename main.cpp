@@ -29,13 +29,10 @@ long timeStep = 0;
 
 double elapsedTime = 0.0;
 
-const int viewH = DISPLAY_H / 4;
-SequenceDisplay testDisplay1 = SequenceDisplay(0, viewH*0, DISPLAY_W, viewH, 1, 10);
-SequenceDisplay testDisplay2 = SequenceDisplay(0, viewH*1, DISPLAY_W, viewH, 0.01, 10);
-SequenceDisplay testDisplay3 = SequenceDisplay(0, viewH*2, DISPLAY_W, viewH, 0.1, 10);
-
 
 Module* modules[MODULE_COUNT];
+
+Display* display;
 
 
 void generateSample(double deltaTime, double time, long step) {
@@ -47,9 +44,8 @@ void generateSample(double deltaTime, double time, long step) {
         modules[i]->updateValue();
     }
 
-    testDisplay1.addDataPoint(modules[0]->moduleValue);
-    testDisplay2.addDataPoint(modules[1]->moduleValue);
-    testDisplay3.addDataPoint(modules[2]->moduleValue);
+    display->update();
+
 }
 
 
@@ -120,11 +116,11 @@ int main ( int argc, char** argv ) {
 
     // Create modules
     for (int i = 0; i < MODULE_COUNT; i++) {
-        modules[i] = new Module();
+        modules[i] = new Module(i + 1);
     }
 
     modules[0]->setType(OSCILLATOR_TYPE);
-    //modules[0]->setParameterSource(AMP, 2);
+    modules[0]->setParameterSource(AMP, 2);
     modules[0]->setParameterSource(FREQ, 1);
     //modules[0]->setParameterValue(FREQ, 220);
     modules[0]->setParameterValue(AMP, 1);
@@ -132,13 +128,13 @@ int main ( int argc, char** argv ) {
 
     modules[1]->setType(OSCILLATOR_TYPE);
     modules[1]->setParameterValue(FREQ, 1);
-    modules[1]->setParameterValue(AMP, 50);
-    modules[1]->setParameterValue(OFFS, 200);
+    modules[1]->setParameterValue(AMP, 10);
+    modules[1]->setParameterValue(OFFS, 400);
 
     modules[2]->setType(OSCILLATOR_TYPE);
-    modules[2]->setParameterValue(FREQ, 1);
-    modules[2]->setParameterValue(AMP, 0.5);
-    modules[2]->setParameterValue(OFFS, 0.5);
+    modules[2]->setParameterValue(FREQ, 1.3113);
+    modules[2]->setParameterValue(AMP, 0.3);
+    modules[2]->setParameterValue(OFFS, 0.6);
 
 
     // initialize SDL video
@@ -159,6 +155,9 @@ int main ( int argc, char** argv ) {
         printf("Unable to set %d x %d video with %d bits per pixel: %s\n", DISPLAY_W, DISPLAY_H, DISPLAY_BPP, SDL_GetError());
         return 1;
     }
+
+    // Create display
+    display = new Display(modules, MODULE_COUNT, DISPLAY_W, DISPLAY_H, DISPLAY_COLUMNS );
 
     // Start playing
     setupSound();
@@ -191,9 +190,7 @@ int main ( int argc, char** argv ) {
         // clear screen
         //SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 
-        testDisplay1.draw(screen);
-        testDisplay2.draw(screen);
-        testDisplay3.draw(screen);
+        display->draw(screen);
 
         // DRAWING ENDS HERE
 

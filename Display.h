@@ -9,7 +9,17 @@
 
 #include "utils.h"
 #include "constants.h"
+#include "ModuleType.h"
+#include "ModuleTypes.h"
+#include "Module.h"
 
+
+double displayScale = 1.0;
+int displaySpeed = 1;
+bool autoScale = false;
+
+
+const Uint32 textColor = rgbaColor(1, 1, 0, 1);;
 
 
 class SequenceDisplay {
@@ -132,14 +142,97 @@ class SequenceDisplay {
 };
 
 
+class ModuleDisplay {
+  public:
+
+    Module* module;
+    int x;
+    int y;
+    int w;
+    int h;
+
+    static const int topMargin = 10;
+
+    SequenceDisplay *sequenceDisplay;
+
+    ModuleDisplay(Module* module_, int x_, int y_, int w_, int h_) {
+        module = module_;
+        x = x_;
+        y = y_;
+        w = w_;
+        h = h_;
+
+        sequenceDisplay = new SequenceDisplay(x, y + topMargin, w, h - topMargin, 1.0, 1);
+    }
+
+
+    void update() {
+        // Update data
+        sequenceDisplay->addDataPoint(module->moduleValue);
+    }
+
+    void draw(SDL_Surface* surface) {
+        // Draw histogram
+        sequenceDisplay->draw(surface);
+
+        // Draw title
+        stringColor(surface, x, y, module->getName().c_str(), textColor );
+    }
+};
+
 
 class Display {
   public:
 
-    Display() {
+    Module** modules;
+    int moduleCount;
+
+    ModuleDisplay** moduleDisplays;
+    int rows;
+    int columns;
+
+    Display(Module** modules_, int moduleCount_, int w, int h, int columns_) {
+        modules = modules_;
+        moduleCount = moduleCount_;
+
+        columns = columns_;
+
+        // Calculate number of rows to use
+        int rows = moduleCount / columns;
+        if ((moduleCount % columns) > 0) rows++;
+
+        moduleDisplays = new ModuleDisplay*[rows*columns];
+
+        int moduleW = w / columns;
+        int moduleH = h / rows;
+
+        int index = 0;
+        int x = 0;
+        int y = 0;
+        for (int row = 0; row < rows; row++) {
+            x = 0;
+            for (int column = 0; column < columns; column++) {
+                if (index < moduleCount) {
+                    moduleDisplays[row * columns + column] = new ModuleDisplay(modules[index], x, y, moduleW, moduleH);
+                }
+                index++;
+                x += moduleW;
+            }
+            y += moduleH;
+        }
     }
 
+    void update() {
+        for (int i = 0; i < moduleCount; i++) {
+            moduleDisplays[i]->update();
+        }
+    }
 
+    void draw(SDL_Surface* surface) {
+        for (int i = 0; i < moduleCount; i++) {
+            moduleDisplays[i]->draw(surface);
+        }
+    }
 
 };
 

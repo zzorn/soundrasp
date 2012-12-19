@@ -17,10 +17,9 @@ double randomDouble() {
 
 /**
   Random number generated with xorshift algorithm.
-  NOTE: For audio applications this one sucks, too much repeating harmonics.
 */
-long xorshiftRandomLong(long seed) {
-    long x = seed ^ 2463534242UL;
+uint64_t xorshiftRandomLong(uint64_t seed) {
+    uint64_t x = seed ^ 2463534242UL;
     x ^= (x << 21);
     x ^= (x >> 35);
     x ^= (x << 4);
@@ -40,14 +39,14 @@ double clampZeroToOne(double v) {
     return v;
 }
 
-Uint32 rgbaInt(int r, int g, int b, int a) {
+uint32_t rgbaInt(int r, int g, int b, int a) {
     return ((r & 0xFF) << 24) |
            ((g & 0xFF) << 16) |
            ((b & 0xFF) << 8) |
            ((a & 0xFF) << 0);
 }
 
-Uint32 rgbaColor(double r, double g, double b, double a) {
+uint32_t rgbaColor(double r, double g, double b, double a) {
     return rgbaInt(255*clampZeroToOne(r),
                    255*clampZeroToOne(g),
                    255*clampZeroToOne(b),

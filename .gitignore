@@ -23,3 +23,5 @@
 bin/
 obj/
 
+old_cpp_src/bin/
+old_cpp_src/obj/

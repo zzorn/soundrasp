@@ -18,6 +18,8 @@
 
 # Backups and temps files
 *.*~
+*.b#?
+*.s#?
 
 # bin folder
 bin/

@@ -20,6 +20,7 @@
 *.*~
 *.b#?
 *.s#?
+*.l#?
 
 # bin folder
 bin/

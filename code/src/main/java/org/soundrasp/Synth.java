@@ -1,128 +1,110 @@
 package org.soundrasp;
 
 
-import org.soundrasp.modules.Module;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
-import java.util.ArrayList;
-import java.util.List;
+import org.soundrasp.model.Patch;
+import org.soundrasp.outputs.AudioOutput;
+import org.soundrasp.outputs.SignalOutput;
 
 /**
- *
+ * Generates samples for the specified patch and sends them to the specified SignalOutput.
  */
 public class Synth {
 
-    private static final int SAMPLES_PER_SECOND = 44100;
-    private static final int CHANNELS_IN_USE = 2;
-    private static final int BYTES_PER_CHANNEL = 2;
-    private static final int BYTES_PER_SAMPLE = BYTES_PER_CHANNEL * CHANNELS_IN_USE;
-    private static final int OUTPUT_BUFFER_SIZE = BYTES_PER_SAMPLE * SAMPLES_PER_SECOND / 10;
-    private final SampleData sampleData = new SampleData();
+    private static final int DEFAUT_SAMPLES_PER_SECOND = 44100;
 
-    private List<Module> modules = new ArrayList<Module>();
-    private Module masterModule;
+    private SignalOutput signalOutput;
+    private Patch patch;
+
+    private final int samplesPerSecond;
+    private final double secondsPerSample;
 
     private long sampleCounter = 0;
-    private double secondsPerSample = 1.0 / SAMPLES_PER_SECOND;
-    private boolean outputToAudioOut = true;
-    private final byte[] outputBuffer = new byte[OUTPUT_BUFFER_SIZE];
-    private int outputBufferPos = 0;
-    private SourceDataLine outputLine;
-    private int minSamplesToProcess;
 
-    public void addModule(Module module) {
-        modules.add(module);
-        masterModule = module;
+    private boolean quit = false;
+
+
+    public Synth() {
+        this (null);
+    }
+
+    public Synth(SignalOutput signalOutput) {
+        this(signalOutput, null);
+    }
+
+    public Synth(SignalOutput signalOutput, Patch patch) {
+        this(signalOutput, patch, DEFAUT_SAMPLES_PER_SECOND);
+    }
+
+    public Synth(SignalOutput signalOutput, Patch patch, int samplesPerSecond) {
+        this.patch = patch != null ? patch : new Patch();
+        this.samplesPerSecond = samplesPerSecond;
+        this.secondsPerSample = 1.0 / samplesPerSecond;
+        this.signalOutput = signalOutput != null ? signalOutput : new AudioOutput(samplesPerSecond);
+    }
+
+    public Patch getPatch() {
+        return patch;
+    }
+
+    public void setPatch(Patch patch) {
+        this.patch = patch;
     }
 
     public void init() {
-
-        // Specify audio format
-        final AudioFormat audioFormat = new AudioFormat(SAMPLES_PER_SECOND, BYTES_PER_CHANNEL * 8, CHANNELS_IN_USE, true, true);
-
-        // Open output line
-        try {
-            outputLine = AudioSystem.getSourceDataLine(audioFormat);
-            outputLine.open(audioFormat);
-            outputLine.start();
-        } catch (LineUnavailableException e) {
-            throw new IllegalStateException("Could not open audio output line: " + e.getMessage(), e);
-        }
-
-        // At minimum process at least 1/100 second or 1/8th of the buffer.
-        minSamplesToProcess = Math.min(SAMPLES_PER_SECOND / 100, (outputLine.getBufferSize() / BYTES_PER_SAMPLE) / 8);
-
+        signalOutput.init();
     }
 
     public void update() {
 
         // Determine number of samples to calculate
-        int freeBufferSpace = outputLine.available();
-        int samples = freeBufferSpace / BYTES_PER_SAMPLE;
+        int samples = signalOutput.getFreeBufferSpace();
 
-        // Handle each sample
-        if (samples >= minSamplesToProcess) {
-            outputBufferPos = 0;
+        for (int i = 0; i < samples; i++) {
+            // Update all modules
+            updateRound();
 
-            for (int i = 0; i < samples; i++) {
-                // Calculate sample
-                SampleData sampleData = calculateSample(secondsPerSample, sampleCounter);
+            // Get sample from output module.
+            final double sample = patch.getValue();
 
-                // Store it in output buffer
-                int right = convertTo16BitInt(sampleData.right);
-                int left = convertTo16BitInt(sampleData.left);
-
-                outputBuffer[outputBufferPos++] = (byte) (0xFF & (left >> 8));
-                outputBuffer[outputBufferPos++] = (byte) (0xFF & left);
-                outputBuffer[outputBufferPos++] = (byte) (0xFF & (right >> 8));
-                outputBuffer[outputBufferPos++] = (byte) (0xFF & right);
-
-                sampleCounter++;
-
-                // Check if buffer is full
-                if (outputBufferPos >= outputBuffer.length) {
-                    // Write buffer to audio device
-                    sendSamplesToAudio();
-
-                    // Wrap
-                    outputBufferPos = 0;
-                }
-            }
-
-            // Write buffer to audio device
-            sendSamplesToAudio();
+            // Write it to the output
+            signalOutput.writeSample(sample);
         }
     }
 
-    private int convertTo16BitInt(double v) {
-        if (v < -1) v = -1;
-        if (v > 1) v = 1;
+    private void updateRound() {
 
-        return (int) (v * Short.MAX_VALUE);
+        // Update all modules in the patch.
+        patch.update(secondsPerSample, sampleCounter);
+
+        // Keep track of the global sample index we are at
+        this.sampleCounter++;
     }
 
-    private void sendSamplesToAudio() {
-        if (outputToAudioOut && outputBufferPos > 0) {
+    public void start() {
+        while (!quit) {
+            update();
 
-            outputLine.write(outputBuffer, 0, outputBufferPos);
-
+            delay(1);
         }
+
+        dispose();
     }
 
-    private SampleData calculateSample(double sampleDurationSeconds, long sampleCounter) {
-        for (Module module : modules) {
-            module.calculateSample(sampleDurationSeconds, sampleCounter);
-        }
-
-        return masterModule.getCurrentSample();
+    public void stop() {
+        quit = true;
     }
 
     public void dispose() {
-        outputLine.flush();
-        outputLine.close();
+        signalOutput.shutdown();
+    }
+
+
+    private void delay(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            return;
+        }
     }
 
 }

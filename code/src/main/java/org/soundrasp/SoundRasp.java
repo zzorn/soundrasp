@@ -11,31 +11,20 @@ public class SoundRasp  {
         SoundRasp soundRasp = new SoundRasp();
         soundRasp.init();
         soundRasp.start();
-
     }
 
     public void init() {
 
         synth = new Synth();
-        synth.addModule(new SineModule(2));
-        synth.addModule(new SineModule(400));
+
+        synth.getPatch().addSlotWithModule(new SineModule(200));
+        //synth.getPatch().addSlotWithModule(new SineModule(2));
 
         synth.init();
 	}
 
     public void start() {
-
-        while (true) {
-            synth.update();
-
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                return;
-            }
-        }
-
-        //synth.dispose();
+        synth.start();
     }
 
 }

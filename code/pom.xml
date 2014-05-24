@@ -29,11 +29,30 @@
             <version>0.1.20</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>2.7.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.parboiled</groupId>
+            <artifactId>parboiled-java</artifactId>
+            <version>1.1.6</version>
+        </dependency>
+
+        <!-- Simple logging implementation -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.7</version>
+        </dependency>
 
     </dependencies>
 
 
     <repositories>
+
         <repository>
             <id>zzorn-mvn-repo</id>
             <url>https://raw.github.com/zzorn/maven-repo/master/repository/</url>
@@ -42,6 +61,12 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+
+        <repository>
+            <id>conjars.org</id>
+            <url>http://conjars.org/repo</url>
+        </repository>
+
     </repositories>
 
 

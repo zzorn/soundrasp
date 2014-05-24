@@ -1,6 +1,12 @@
 package org.soundrasp.modules;
 
+import org.flowutils.SimpleFrame;
 import org.flowutils.SimplexGradientNoise;
+import org.soundrasp.model.ModuleBase;
+import org.soundrasp.model.Parameter;
+
+import javax.swing.*;
+import java.util.List;
 
 /**
  *
@@ -14,6 +20,7 @@ public class SineModule extends ModuleBase {
     private final double offset;
 
     private double phase;
+    private JSlider frequencySlider;
 
     public SineModule() {
         this(440);
@@ -31,11 +38,15 @@ public class SineModule extends ModuleBase {
         this.frequency = frequency;
         this.amplitude = amplitude;
         this.offset = offset;
+
+        frequencySlider = new JSlider(100, 800, 300);
+        SimpleFrame simpleFrame = new SimpleFrame("test", frequencySlider);
     }
 
-    @Override
-    protected double calculateSampleValue(double durationSeconds, long sampleCounter) {
 
+    @Override
+    protected double calculateValue(double durationSeconds, long sampleCounter) {
+/*
         // Testing...
         //frequency = (Math.sin(sampleCounter / 100000.0) * 0.5 + 0.5 ) * 200 + 50;
         frequency = SimplexGradientNoise.sdnoise1(sampleCounter / 2390070.0) * 100 + 50;
@@ -43,6 +54,8 @@ public class SineModule extends ModuleBase {
         frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 123770.0) * 50 + 50;
         frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 32891.0) * 10 + 10;
 //        frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 7871.0) * 3 + 3;
+*/
+        frequency = frequencySlider.getValue();
 
         // Phase in the wave
         phase += durationSeconds * frequency;

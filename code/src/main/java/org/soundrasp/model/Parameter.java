@@ -1,7 +1,5 @@
 package org.soundrasp.model;
 
-import org.soundrasp.model.Source;
-
 /**
  * Describes a parameter used by a module.
  */
@@ -18,7 +16,7 @@ public final class Parameter {
         this.name = name;
         this.description = description;
         this.defaultValue = defaultValue;
-        setValue(defaultValue);
+        set(defaultValue);
     }
 
     /**
@@ -45,7 +43,7 @@ public final class Parameter {
     /**
      * @return the value of the parameter, or if a source is specified, the value of the source.
      */
-    public double getValue() {
+    public double get() {
         if (source != null) return source.getValue();
         else return value;
     }
@@ -53,7 +51,7 @@ public final class Parameter {
     /**
      * Sets the parameter to the specified value, and removes any reference to a source.
      */
-    public void setValue(double value) {
+    public void set(double value) {
         this.value = value;
         this.source = null;
     }
@@ -65,7 +63,7 @@ public final class Parameter {
     /**
      * @param source a source to use to get the parameter value.
      */
-    public void setSource(Source source) {
+    public void setFrom(Source source) {
         this.source = source;
     }
 }

@@ -18,8 +18,9 @@ public final class Patch implements Source {
         }
     }
 
-    public void addSlotWithModule(Module module) {
+    public <T extends Module> T addSlotWithModule(T module) {
         addSlot(new Slot(module));
+        return module;
     }
 
     private void addSlot(Slot slot) {

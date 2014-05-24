@@ -1,12 +1,10 @@
 package org.soundrasp.modules;
 
 import org.flowutils.SimpleFrame;
-import org.flowutils.SimplexGradientNoise;
 import org.soundrasp.model.ModuleBase;
 import org.soundrasp.model.Parameter;
 
 import javax.swing.*;
-import java.util.List;
 
 /**
  *
@@ -15,11 +13,12 @@ public class SineModule extends ModuleBase {
 
     private static final double Tau = Math.PI * 2;
 
-    private  double frequency;
-    private final double amplitude;
-    private final double offset;
+    public final Parameter frequency;
+    public final Parameter amplitude;
+    public final Parameter phase;
+    public final Parameter offset;
 
-    private double phase;
+    private double currentPhase;
     private JSlider frequencySlider;
 
     public SineModule() {
@@ -35,12 +34,20 @@ public class SineModule extends ModuleBase {
     }
 
     public SineModule(double frequency, double amplitude, double offset) {
-        this.frequency = frequency;
-        this.amplitude = amplitude;
-        this.offset = offset;
+        this(frequency, amplitude, offset, 0);
+    }
 
+    public SineModule(double frequency, double amplitude, double offset, double phase) {
+
+        // Test
         frequencySlider = new JSlider(100, 800, 300);
         SimpleFrame simpleFrame = new SimpleFrame("test", frequencySlider);
+
+
+        this.frequency = parameter("Frequency", frequency);
+        this.amplitude = parameter("Amplitude", amplitude);
+        this.offset = parameter("Offset", offset);
+        this.phase = parameter("Phase", phase);
     }
 
 
@@ -55,19 +62,19 @@ public class SineModule extends ModuleBase {
         frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 32891.0) * 10 + 10;
 //        frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 7871.0) * 3 + 3;
 */
-        frequency = frequencySlider.getValue();
+        //frequency.set(frequencySlider.getValue());
 
         // Phase in the wave
-        phase += durationSeconds * frequency;
+        currentPhase += durationSeconds * frequency.get();
 
         // Sine wave
-        double value = amplitude * Math.sin((offset + phase) * Tau);
+        double value = amplitude.get() * Math.sin((phase.get() + currentPhase) * Tau) + offset.get();
 
         // Bring phase down if it gets too large
-        if (phase > 10000) phase -= 10000;
-        if (phase > 1000) phase -= 1000;
-        if (phase > 100) phase -= 100;
-        if (phase > 10) phase -= 10;
+        if (currentPhase > 100000) currentPhase -= 100000;
+        if (currentPhase > 1000) currentPhase -= 1000;
+        if (currentPhase > 100) currentPhase -= 100;
+        if (currentPhase > 10) currentPhase -= 10;
 
         return value;
     }

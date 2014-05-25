@@ -20,11 +20,13 @@ public class SoundRasp  {
 
         synth = new Synth();
 
-        final SineModule hfo = synth.getPatch().addSlotWithModule(new SineModule(200));
-        final SineModule lfo = synth.getPatch().addSlotWithModule(new SineModule(2));
-        final SineModule vlfo = synth.getPatch().addSlotWithModule(new SineModule(0.1, 2, 2));
+        final SineModule hfo = synth.getPatch().addSlotWithModule(new SineModule(220));
+        final SineModule lfo = synth.getPatch().addSlotWithModule(new SineModule(21));
+        final SineModule vlfo = synth.getPatch().addSlotWithModule(new SineModule(0.78, 2, 2));
+        final SineModule vlfo2 = synth.getPatch().addSlotWithModule(new SineModule(0.13, 100, 200));
         hfo.amplitude.setFrom(lfo);
         lfo.frequency.setFrom(vlfo);
+        hfo.frequency.setFrom(vlfo2);
 
         synth.init();
 	}

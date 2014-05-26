@@ -13,16 +13,14 @@ public interface SignalOutput extends Service {
     public int getFreeBufferSpace();
 
     /**
-     * Write a single sample to the output.
+     * Write a mono sample to the output.
      */
-    public void writeSample(double sample);
+    public void writeMonoSample(double monoSample);
 
     /**
-     * Writes samples from the specified array to the output.
-     * @param sampleBuffer array to write samples from.
-     * @param start First index in the array to write from (inclusive.
-     * @param end last index in the array to write from (exclusive).
+     * Write a stereo sample to the output.
      */
-    public void writeSamples(double sampleBuffer[], int start, int end);
+    public void writeStereoSample(double leftSample, double rightSample);
+
 
 }

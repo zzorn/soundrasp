@@ -1,10 +1,7 @@
 package org.soundrasp.modules;
 
-import org.flowutils.SimpleFrame;
 import org.soundrasp.model.ModuleBase;
-import org.soundrasp.model.Parameter;
-
-import javax.swing.*;
+import org.soundrasp.model.Param;
 
 /**
  *
@@ -13,13 +10,12 @@ public class SineModule extends ModuleBase {
 
     private static final double Tau = Math.PI * 2;
 
-    public final Parameter frequency;
-    public final Parameter amplitude;
-    public final Parameter phase;
-    public final Parameter offset;
+    public final Param frequency;
+    public final Param amplitude;
+    public final Param phase;
+    public final Param offset;
 
     private double currentPhase;
-    private JSlider frequencySlider;
 
     public SineModule() {
         this(440);
@@ -39,32 +35,17 @@ public class SineModule extends ModuleBase {
 
     public SineModule(double frequency, double amplitude, double offset, double phase) {
 
-        // Test
-        frequencySlider = new JSlider(100, 800, 300);
-        SimpleFrame simpleFrame = new SimpleFrame("test", frequencySlider);
-
-
-        this.frequency = parameter("Frequency", frequency);
-        this.amplitude = parameter("Amplitude", amplitude);
-        this.offset = parameter("Offset", offset);
-        this.phase = parameter("Phase", phase);
+        this.frequency = param("Frequency", frequency);
+        this.amplitude = param("Amplitude", amplitude);
+        this.offset = param("Offset", offset);
+        this.phase = param("Phase", phase);
     }
 
 
     @Override
     protected double calculateValue(double durationSeconds, long sampleCounter) {
-/*
-        // Testing...
-        //frequency = (Math.sin(sampleCounter / 100000.0) * 0.5 + 0.5 ) * 200 + 50;
-        frequency = SimplexGradientNoise.sdnoise1(sampleCounter / 2390070.0) * 100 + 50;
-        frequency = SimplexGradientNoise.sdnoise1(sampleCounter / 239008970.0) * 100 + 100;
-        frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 123770.0) * 50 + 50;
-        frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 32891.0) * 10 + 10;
-//        frequency += SimplexGradientNoise.sdnoise1(sampleCounter / 7871.0) * 3 + 3;
-*/
-        //frequency.set(frequencySlider.getValue());
 
-        // Phase in the wave
+        // Update phase in the wave
         currentPhase += durationSeconds * frequency.get();
 
         // Sine wave

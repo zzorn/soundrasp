@@ -16,6 +16,6 @@ public interface Module extends Source {
     /**
      * @return list of the parameters provided by the module.
      */
-    List<Parameter> getParameters();
+    List<Param> getParameters();
 
 }

@@ -1,14 +1,15 @@
 package org.soundrasp;
 
 
+import org.flowutils.service.ServiceBase;
 import org.soundrasp.model.Patch;
 import org.soundrasp.outputs.AudioOutput;
 import org.soundrasp.outputs.SignalOutput;
 
 /**
- * Generates samples for the specified patch and sends them to the specified SignalOutput.
+ * Generates samples for the specified patch and sends them to the specified signalOutput.
  */
-public class Synth {
+public class Synth extends ServiceBase implements Updating {
 
     private static final int DEFAUT_SAMPLES_PER_SECOND = 44100;
 
@@ -19,8 +20,6 @@ public class Synth {
     private final double secondsPerSample;
 
     private long sampleCounter = 0;
-
-    private boolean quit = false;
 
 
     public Synth() {
@@ -50,61 +49,28 @@ public class Synth {
         this.patch = patch;
     }
 
-    public void init() {
-        signalOutput.init();
-    }
-
     public void update() {
 
         // Determine number of samples to calculate
         int samples = signalOutput.getFreeBufferSpace();
 
         for (int i = 0; i < samples; i++) {
-            // Update all modules
-            updateRound();
+            // Update all modules in the patch.
+            patch.update(secondsPerSample, sampleCounter);
 
-            // Get sample from output module.
-            final double sample = patch.getValue();
-
-            // Write it to the output
-            signalOutput.writeSample(sample);
+            // Keep track of the global sample index we are at
+            this.sampleCounter++;
         }
     }
 
-    private void updateRound() {
 
-        // Update all modules in the patch.
-        patch.update(secondsPerSample, sampleCounter);
+    @Override
+    protected void doInit() {
 
-        // Keep track of the global sample index we are at
-        this.sampleCounter++;
     }
 
-    public void start() {
-        while (!quit) {
-            update();
+    @Override
+    protected void doShutdown() {
 
-            delay(1);
-        }
-
-        dispose();
     }
-
-    public void stop() {
-        quit = true;
-    }
-
-    public void dispose() {
-        signalOutput.shutdown();
-    }
-
-
-    private void delay(int milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            return;
-        }
-    }
-
 }

@@ -3,7 +3,7 @@ package org.soundrasp.model;
 /**
  * Describes a parameter used by a module.
  */
-public final class Parameter {
+public final class Param {
 
     private final String name;
     private final String description;
@@ -12,7 +12,7 @@ public final class Parameter {
     private double value;
     private Source source = null;
 
-    public Parameter(String name, String description, double defaultValue) {
+    public Param(String name, String description, double defaultValue) {
         this.name = name;
         this.description = description;
         this.defaultValue = defaultValue;
@@ -63,7 +63,7 @@ public final class Parameter {
     /**
      * @param source a source to use to get the parameter value.
      */
-    public void setFrom(Source source) {
+    public void set(Source source) {
         this.source = source;
     }
 }

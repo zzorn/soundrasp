@@ -1,7 +1,5 @@
 package org.soundrasp.model;
 
-import org.soundrasp.model.Module;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +9,7 @@ import java.util.List;
 public abstract class ModuleBase implements Module {
 
     private double value = 0;
-    private List<Parameter> parameters = new ArrayList<Parameter>(16);
+    private List<Param> parameters;
 
     @Override
     public final void update(double durationSeconds, long sampleCounter) {
@@ -26,14 +24,24 @@ public abstract class ModuleBase implements Module {
     }
 
     /**
+     * Defines a parameter with no description and a zero default value for this module.
+     *
+     * @param name user readable name of the parameter.  Should be 16 characters or shorter.
+     * @return the registered parameter.
+     */
+    protected Param param(String name) {
+        return param(name, null, 0);
+    }
+
+    /**
      * Defines a parameter with no description for this module.
      *
      * @param name user readable name of the parameter.  Should be 16 characters or shorter.
      * @param defaultValue initial and default value for the parameter.
      * @return the registered parameter.
      */
-    protected Parameter parameter(String name, double defaultValue) {
-        return parameter(name, null, defaultValue);
+    protected Param param(String name, double defaultValue) {
+        return param(name, null, defaultValue);
     }
 
     /**
@@ -44,14 +52,19 @@ public abstract class ModuleBase implements Module {
      * @param defaultValue initial and default value for the parameter.
      * @return the registered parameter.
      */
-    protected Parameter parameter(String name, String description, double defaultValue) {
-        final Parameter parameter = new Parameter(name, description, defaultValue);
+    protected Param param(String name, String description, double defaultValue) {
+        final Param parameter = new Param(name, description, defaultValue);
+
+        if (parameters == null) {
+            parameters = new ArrayList<Param>(16);
+        }
         parameters.add(parameter);
+
         return parameter;
     }
 
     @Override
-    public List<Parameter> getParameters() {
+    public List<Param> getParameters() {
         return parameters;
     }
 }

@@ -7,15 +7,21 @@ public final class Param {
 
     private final String name;
     private final String description;
+
     private final double defaultValue;
-
+    private final double minValue;
+    private final double maxValue;
     private double value;
-    private Source source = null;
 
-    public Param(String name, String description, double defaultValue) {
+    private Source source = null;
+    private ParamListener listener;
+
+    public Param(String name, String description, double defaultValue, double minValue, double maxValue) {
         this.name = name;
         this.description = description;
         this.defaultValue = defaultValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
         set(defaultValue);
     }
 
@@ -40,6 +46,14 @@ public final class Param {
         return defaultValue;
     }
 
+    public double getMinValue() {
+        return minValue;
+    }
+
+    public double getMaxValue() {
+        return maxValue;
+    }
+
     /**
      * @return the value of the parameter, or if a source is specified, the value of the source.
      */
@@ -53,7 +67,14 @@ public final class Param {
      */
     public void set(double value) {
         this.value = value;
-        this.source = null;
+
+        // Clear source
+        set((Source) null);
+
+        // Notify listener
+        if (listener != null) {
+            listener.onValueChange(this, get());
+        }
     }
 
     public Source getSource() {
@@ -64,6 +85,25 @@ public final class Param {
      * @param source a source to use to get the parameter value.
      */
     public void set(Source source) {
-        this.source = source;
+        if (source != this.source) {
+            Source oldSource = source;
+
+            this.source = source;
+
+            // Notify listener
+            if (listener != null) {
+                listener.onSourceChange(this, oldSource, source);
+                listener.onValueChange(this, get());
+            }
+        }
+    }
+
+    public void setListener(ParamListener listener) {
+        this.listener = listener;
+    }
+
+    public interface ParamListener {
+        void onValueChange(Param param, double value);
+        void onSourceChange(Param param, Source oldSource, Source newSource);
     }
 }

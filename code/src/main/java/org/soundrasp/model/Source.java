@@ -5,6 +5,8 @@ package org.soundrasp.model;
  */
 public interface Source {
 
+    String getName();
+
     double getValue();
 
 }

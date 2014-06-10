@@ -14,12 +14,12 @@ public final class Patch implements Source {
 
     public void addSlots(int count) {
         for (int i = 0; i < count; i++) {
-            addSlot(new Slot());
+            addSlot(new Slot(createNewSlotName()));
         }
     }
 
     public <T extends Module> T addSlotWithModule(T module) {
-        addSlot(new Slot(module));
+        addSlot(new Slot(module, createNewSlotName()));
         return module;
     }
 
@@ -41,9 +41,20 @@ public final class Patch implements Source {
         else return 0;
     }
 
+    @Override
+    public String getName() {
+        return "Patch " + toString();
+    }
+
     public void update(double secondsPerSample, long sampleCounter) {
         for (Slot slot : slots) {
             slot.update(secondsPerSample, sampleCounter);
         }
     }
+
+    private String createNewSlotName() {
+        return "" + slots.size();
+    }
+
+
 }

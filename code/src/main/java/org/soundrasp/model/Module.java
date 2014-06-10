@@ -8,6 +8,10 @@ import java.util.List;
  */
 public interface Module extends Source {
 
+    String getName();
+
+    String getDescription();
+
     /**
      * Updates the output value of the module based on its parameters.
      */
@@ -17,5 +21,9 @@ public interface Module extends Source {
      * @return list of the parameters provided by the module.
      */
     List<Param> getParameters();
+
+    void addListener(ModuleListener listener);
+
+    void removeListener(ModuleListener listener);
 
 }

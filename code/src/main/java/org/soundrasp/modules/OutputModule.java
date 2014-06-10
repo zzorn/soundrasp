@@ -11,15 +11,19 @@ import static org.flowutils.MathUtils.*;
  */
 public class OutputModule extends ModuleBase {
 
-    public final Param centerChannel = param("Center Channel", "This channel is audible in both the left and right channels", 0);
+    public final Param centerChannel = param("Center Channel", "This channel is audible in both the left and right channels", 0, -1.0, 1.0);
     public final Param leftChannel = param("Left Channel");
     public final Param rightChannel = param("Right Channel");
-    public final Param centerVolume = param("Center Volume", 1);
-    public final Param leftVolume = param("Left Volume", 1);
-    public final Param rightVolume = param("Right Volume", 1);
-    public final Param blendAmount = param("Blend", "How much to mix the two channels together", 0);
-    public final Param masterVolume = param("Master Volume", 0.5);
-    public final Param masterBalance = param("Master Balance", "Balance between right and left channel volume", 0);
+    public final Param centerVolume = param("Center Volume", 1, 0, 2.0);
+    public final Param leftVolume = param("Left Volume", 1, 0, 2.0);
+    public final Param rightVolume = param("Right Volume", 1, 0, 2.0);
+    public final Param blendAmount = param("Blend", "How much to mix the two channels together", 0, 0, 1.0);
+    public final Param masterVolume = param("Master Volume", 0.5, 0, 2.0);
+    public final Param masterBalance = param("Master Balance", "Balance between right and left channel volume", 0, -1.0, 1.0);
+
+    public OutputModule() {
+        super("Output");
+    }
 
     @Override
     protected double calculateValue(double durationSeconds, long sampleCounter) {

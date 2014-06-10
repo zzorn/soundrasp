@@ -33,11 +33,12 @@ public class SmoothNoiseModule extends ModuleBase {
     }
 
     public SmoothNoiseModule(double frequency, double amplitude, double offset, double phase) {
+        super("Smooth Noise");
 
-        this.frequency = param("Frequency", frequency);
-        this.amplitude = param("Amplitude", amplitude);
-        this.offset = param("Offset", offset);
-        this.phase = param("Phase", "Initial offset in the noise to start from", phase);
+        this.frequency = param("Frequency", frequency, 0, 100.0);
+        this.amplitude = param("Amplitude", amplitude, -10.0, 10.0);
+        this.offset = param("Offset", offset, -10.0, 10.0);
+        this.phase = param("Phase", "Initial offset in the noise to start from", phase, -10.0, 10.0);
     }
 
 

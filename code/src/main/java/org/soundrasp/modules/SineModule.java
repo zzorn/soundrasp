@@ -34,11 +34,12 @@ public class SineModule extends ModuleBase {
     }
 
     public SineModule(double frequency, double amplitude, double offset, double phase) {
+        super("Sine Wave");
 
-        this.frequency = param("Frequency", frequency);
-        this.amplitude = param("Amplitude", amplitude);
-        this.offset = param("Offset", offset);
-        this.phase = param("Phase", phase);
+        this.frequency = param("Frequency", frequency, 0, 100.0);
+        this.amplitude = param("Amplitude", amplitude, -10.0, 10.0);
+        this.offset = param("Offset", offset, -10.0, 10.0);
+        this.phase = param("Phase", phase, -10.0, 10.0);
     }
 
 

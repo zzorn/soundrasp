@@ -9,11 +9,11 @@ import org.soundrasp.model.Param;
  */
 public class InertiaModule extends ModuleBase {
 
-    public final Param target = new Param("Target", "Target value that the module aims for", 0);
-    public final Param attraction = new Param("Attraction", "Force that the value moves towards the target value.", 1);
-    public final Param inertia = new Param("Inertia", "How slowly the velocity changes (how 'massive' the moving object is)", 1);
-    public final Param drag = new Param("Drag", "How much resistance there is to movement", 0.1);
-    public final Param brakingDistance = new Param("Braking Distance", "At what distance from the target value to start reducing the attraction force", 0.1);
+    public final Param target = param("Target", "Target value that the module aims for", 0, -10.0, 10.0);
+    public final Param attraction = param("Attraction", "Force that the value moves towards the target value.", 1, 0, 1.0);
+    public final Param inertia = param("Inertia", "How slowly the velocity changes (how 'massive' the moving object is)", 1, 0, 1.0);
+    public final Param drag = param("Drag", "How much resistance there is to movement", 0.1, 0, 1.0);
+    public final Param brakingDistance = param("Braking Distance", "At what distance from the target value to start reducing the attraction force", 0.1, 0, 10.0);
 
     private double velocity;
     private double value;
@@ -35,6 +35,8 @@ public class InertiaModule extends ModuleBase {
     }
 
     public InertiaModule(double attraction, double inertia, double drag, double brakingDistance) {
+        super("Inertia");
+
         this.attraction.set(attraction);
         this.inertia.set(inertia);
         this.drag.set(drag);
@@ -58,7 +60,7 @@ public class InertiaModule extends ModuleBase {
         double frictionForce = -Math.signum(velocity) * velocity * velocity * drag.get();
 
         // Update velocity
-        velocity += durationSeconds * (attractionForce + frictionForce) / inertia.get();
+        velocity += durationSeconds * (attractionForce + frictionForce) / Math.max(inertia.get(), 0.0001); // Avoid divide by zero which puts a value to NaN
 
         // Update value
         value += velocity;

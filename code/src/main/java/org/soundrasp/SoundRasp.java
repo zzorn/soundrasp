@@ -2,10 +2,12 @@ package org.soundrasp;
 
 
 import org.flowutils.service.Service;
+import org.flowutils.ui.SimpleFrame;
 import org.soundrasp.model.Patch;
 import org.soundrasp.modules.*;
 import org.soundrasp.outputs.AudioOutput;
 import org.soundrasp.outputs.SignalOutput;
+import org.soundrasp.ui.PatchUi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,10 @@ public final class SoundRasp  {
         }
 
         configureTestSynth();
+
+        // Create UI
+        final PatchUi patchUi = new PatchUi(synth.getPatch());
+        SimpleFrame simpleFrame = new SimpleFrame("Sound Rasp", patchUi.getUi());
 	}
 
     private void configureTestSynth() {

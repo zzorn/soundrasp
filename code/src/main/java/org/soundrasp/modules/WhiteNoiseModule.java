@@ -38,11 +38,12 @@ public class WhiteNoiseModule extends ModuleBase {
     }
 
     public WhiteNoiseModule(double frequency, double amplitude, double offset, double seed) {
+        super("White Noise");
 
-        this.frequency = param("Frequency", frequency);
-        this.amplitude = param("Amplitude", amplitude);
-        this.offset = param("Offset", offset);
-        this.seed = param("Seed", seed);
+        this.frequency = param("Frequency", frequency, 0, 100.0);
+        this.amplitude = param("Amplitude", amplitude, -10.0, 10.0);
+        this.offset = param("Offset", offset, -10.0, 10.0);
+        this.seed = param("Seed", seed, -10.0, 10.0);
     }
 
 

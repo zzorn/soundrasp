@@ -4,25 +4,46 @@ epsilon = 0.01;
 
 ioModule();
 
-module ioModule(w = 86, h = 100, depth = 32, wall = 2, angle=45) {
+
+
+module ioModule(w = 86, h = 100, depth = 35, wall = 5, lidLen = 65, slopeLen = 50, angle=45) {
+
+    module disp(h = 0) {
+        translate([0, lidLen, depth])
+            rotate([angle, 0,0])
+                translate([0, slopeLen / 2 - 12, -13+h])
+                    displayPcb();
+    }
 
     upperDepth = 32;
     upperH = 58;
 
-    pcbD = 7+wall;
+    pcbD = 7 + wall;
 
-    translate([0, -2, pcbD+8])
-        rotate(angle, [1, 0,0])
-            translate([0, 25, 0])
-                displayPcb();
+    disp(-2);
        
-    translate([0, -22, pcbD])
-       controlPcb();
-       
-    translate([10,-25,depth])
-        valueKnob();    
+    translate([0,34,0]) {
+        translate([0, 0, pcbD])
+           controlPcb();
+           
+        translate([10,-3,depth])
+            valueKnob();    
+    }   
        
 
+
+    plane(w, h, wall, centerY = false, centerZ=false);
+
+    plane(w, lidLen, wall, z = depth - wall, y = 0, centerY = false, centerY = false, centerZ=false);
+
+    difference() {
+        plane(w, slopeLen, wall, y = lidLen, z = depth - wall, centerY = false, centerZ=false, angleX=angle);
+        disp();
+    }
+
+    %plane(w, depth*2, wall, y = h, centerY = false, centerZ=false, angleX = 90);
+
+/*
     %box(w, h, depth, wall, centerXY=true, zWallEnd=true);
 
     translate([0,h/2-upperH/2,depth])
@@ -30,9 +51,10 @@ module ioModule(w = 86, h = 100, depth = 32, wall = 2, angle=45) {
             rotate(angle, [1,0,0])
                 translate([0,upperH/2,-upperDepth])
                     %box(w, upperH, upperDepth, wall, centerXY=true, zWallEnd=true);
-
+*/
 }
 
+/*
 module box(xSize, ySize, zSize, wallThickness = 1, center=false, centerXY = false, xWallStart=true, xWallEnd=true,yWallStart=true,yWallEnd=true,zWallStart=true,zWallEnd=true) {
 
     halfWT = wallThickness/2;
@@ -51,31 +73,29 @@ module box(xSize, ySize, zSize, wallThickness = 1, center=false, centerXY = fals
 
 
 }
+*/
 
-module plane(centerX, centerY, centerZ, sizeX, sizeY, sizeZ) {
-    translate([centerX - sizeX/2, 
-               centerY - sizeY/2, 
-               centerZ - sizeZ/2]) 
-        cube([sizeX, sizeY, sizeZ]);
+module plane(sizeX, sizeY, sizeZ, x = 0, y = 0, z = 0, centerX=true, centerY=true, centerZ=true, angleX = 0, angleY = 0, angleZ = 0) {
+    translate([x, y, z])
+        rotate([angleX, angleY, angleZ])         
+            translate([centerX ? -sizeX/2 : 0, 
+                       centerY ? -sizeY/2 : 0, 
+                       centerZ ? -sizeZ/2 : 0])
+                cube([sizeX, sizeY, sizeZ]);
 }
 
 module displayPcb() {
 
-    headerH = 5;
-
-    color(pcbColor)
-        plane(0,0,0.5, 80, 60, 1);
-    translate([0, 7+5, headerH])
-        charDisplay8();
+    translate([0, 7+5, 7])
+        charDisplay16x2();
 
 }
 
 
 module controlPcb(pcbThickness = 1.0) {
 
-
     color(pcbColor)
-        plane(0,0,pcbThickness/2, 80, 40, pcbThickness);
+        plane(80, 40, pcbThickness, 0,0,pcbThickness/2);
 
     translate([-25,10,pcbThickness]) {
         quadEncoder();
@@ -86,7 +106,6 @@ module controlPcb(pcbThickness = 1.0) {
     translate([25,10,-6.5])
         quadEncoder();
         
-
 }
 
 
@@ -175,69 +194,85 @@ module knob(diam=15, h = 10) {
 }
 
 
-module charDisplay8() {
+module charDisplay(pcb = [80.0, 36.0, 1.6],
+                   bottomBlock = [70.7, 23.8, 12.0-7.0-1.6], 
+                   displayFrame = [70.7, 23.8, 7.0],
+                   displayArea = [64.5, 14.5, 0.01],
+                   backlight = [3.5, 16.9, 2.75],
+                   mountingHoleDistanceX = 75.0,
+                   mountingHoleDistanceY = 31.0,
+                   mountingHoleDiameter = 2.9) {
 
-    bdw = 33.5;
-    bdh = 28.0;
-    bdd = 3.5;
 
-    bw = 58.36;
-    bh = 32.58;
-    bd = 1.6;
-    
-    dw = 44.65;
-    dh = 26.2;
-    dd = 9.0;
-    
-    aw = 37.9;
-    ah = 16.0;
-    ad = 0.75;
-    
-    bld = 2.75;
-    blh = 16.9;
-    blw = 6.25;
-    
-    mhxd = 53.5;
-    mhyd = 27.5;
-    mhdiam = 2.75;
-    
+    WIDTH = 0;
+    HEIGHT = 1;
+    DEPTH = 2;    
     
     // Base
     difference() {
         color(pcbColor)
-            translate([-bw/2, -bh/2, 0])
-                cube([bw, bh, bd]);
+            translate([-pcb[WIDTH]/2, -pcb[HEIGHT]/2, 0])
+                cube(pcb);
             
         // Mounting holes    
         for (x = [-1, 1], y = [-1, 1]) {
-            translate([x * mhxd/2, y * mhyd/2, -0.01])
-                cylinder(h = bd + 0.02, r = mhdiam/2, $fn=15);
+            translate([x * mountingHoleDistanceX/2, 
+                       y * mountingHoleDistanceY/2, -0.01])
+                cylinder(h = pcb[DEPTH] + 0.02, r = mountingHoleDiameter/2, $fn=20);
         }
     }
         
     // Backlight
     color([0.7, 0.7, 0.7])
-       translate([dw/2, -blh/2, bd])
-           cube([blw, blh, bld]);        
+       translate([displayFrame[WIDTH]/2, -backlight[HEIGHT]/2, pcb[DEPTH]])
+           cube(backlight);        
 
     // Bottom things
     color([0.1, 0.1, 0.1])
-       translate([-bdw/2, -bdh/2, -bdd])
-           cube([bdw, bdh, bdd]);        
+       translate([-bottomBlock[WIDTH]/2, -bottomBlock[HEIGHT]/2, -bottomBlock[DEPTH]])
+           cube(bottomBlock);        
     
     difference() {
         // Display block
         color([0.1, 0.1, 0.1])
-            translate([-dw/2, -dh/2, bd])
-                cube([dw, dh, dd]);
+            translate([-displayFrame[WIDTH]/2, -displayFrame[HEIGHT]/2, pcb[DEPTH]])
+                cube(displayFrame);
                 
         // Display area
         color([0.2, 0.2, 0.9])
-            translate([-aw/2, -ah/2, bd+dd-ad])
-                cube([aw, ah, ad+0.01]);
+            translate([-displayArea[WIDTH]/2, -displayArea[HEIGHT]/2, pcb[DEPTH]+displayFrame[DEPTH]-displayArea[DEPTH]])
+                cube(displayArea + [0,0,0.1]);
     }
 
 }
+
+module charDisplay8x2() {
+
+    charDisplay(pcb = [58.36, 32.58, 1.6],
+                   bottomBlock = [33.5, 28.0, 3.5], 
+                   displayFrame = [44.65, 26.2, 9.0],
+                   displayArea = [37.9, 16.0, 0.01],
+                   backlight = [6.25, 16.9, 2.75],
+                   mountingHoleDistanceX = 53.5,
+                   mountingHoleDistanceY = 27.5,
+                   mountingHoleDiameter = 2.75);    
+
+}
+
+module charDisplay16x2() {
+
+    charDisplay(pcb = [80.0, 36.0, 1.6],
+                   bottomBlock = [70.7, 23.8, 12.0-7.0-1.6], 
+                   displayFrame = [70.7, 23.8, 7.0],
+                   displayArea = [64.5, 14.5, 0.01],
+                   backlight = [3.5, 16.9, 2.75],
+                   mountingHoleDistanceX = 75.0,
+                   mountingHoleDistanceY = 31.0,
+                   mountingHoleDiameter = 2.9);    
+
+
+}
+
 
 module quadEncoder() {
     epsilon = 0.01;

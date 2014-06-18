@@ -16,6 +16,7 @@
 
     <dependencies>
 
+        <!-- Unit testing -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -23,24 +24,28 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Utils -->
         <dependency>
             <groupId>org.flowutils</groupId>
             <artifactId>flowutils</artifactId>
-            <version>0.1.23</version>
+            <version>0.1.24</version>
         </dependency>
 
+        <!-- Compiler -->
         <dependency>
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
             <version>2.7.3</version>
         </dependency>
 
+        <!-- Parser -->
         <dependency>
             <groupId>org.parboiled</groupId>
             <artifactId>parboiled-java</artifactId>
             <version>1.1.6</version>
         </dependency>
 
+        <!-- UI Layout -->
         <dependency>
             <groupId>com.miglayout</groupId>
             <artifactId>miglayout-swing</artifactId>

@@ -565,12 +565,6 @@ EC12E series with push-on switch</description>
 <text x="-1.905" y="-3.175" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
 </symbol>
-<symbol name="V+">
-<wire x1="1.27" y1="-1.905" x2="0" y2="0" width="0.254" layer="94"/>
-<wire x1="0" y1="0" x2="-1.27" y2="-1.905" width="0.254" layer="94"/>
-<text x="-1.27" y="1.27" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="V+" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
-</symbol>
 </symbols>
 <devicesets>
 <deviceset name="+5V" prefix="SUPPLY">
@@ -590,19 +584,6 @@ EC12E series with push-on switch</description>
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
 <gate name="GND" symbol="GND" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="V+" prefix="SUPPLY">
-<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
-<gates>
-<gate name="1" symbol="V+" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -17644,21 +17625,13 @@ Source: RS Component / Phycomp</description>
 <part name="C1" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
 <part name="C2" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
 <part name="C3" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C4" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C5" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
 <part name="C7" library="rcl" deviceset="CPOL-EU" device="E2.5-7" value="10uF"/>
 <part name="C8" library="rcl" deviceset="CPOL-EU" device="E2.5-7" value="100uF"/>
-<part name="SUPPLY45" library="supply2" deviceset="+5V" device=""/>
-<part name="SUPPLY46" library="supply2" deviceset="GND" device=""/>
 <part name="SUPPLY7" library="supply2" deviceset="GND" device=""/>
 <part name="SUPPLY48" library="supply2" deviceset="GND" device=""/>
 <part name="SUPPLY49" library="supply2" deviceset="GND" device=""/>
 <part name="R39" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
 <part name="SUPPLY50" library="supply2" deviceset="GND" device=""/>
-<part name="C9" library="rcl" deviceset="C-EU" device="C0805" value="100nF"/>
-<part name="SUPPLY26" library="supply2" deviceset="GND" device=""/>
-<part name="SUPPLY54" library="supply2" deviceset="V+" device=""/>
 <part name="SUPPLY9" library="supply2" deviceset="+5V" device=""/>
 <part name="SUPPLY47" library="supply2" deviceset="+5V" device=""/>
 <part name="SUPPLY55" library="supply2" deviceset="+5V" device=""/>
@@ -17717,7 +17690,6 @@ Source: RS Component / Phycomp</description>
 <part name="RN2" library="resistor-dil" deviceset="4R-N" device="0603-ARV" value="10k"/>
 <part name="RN3" library="resistor-dil" deviceset="4R-N" device="0603-ARV" value="10k"/>
 <part name="SUPPLY8" library="supply2" deviceset="+5V" device=""/>
-<part name="RN1" library="resistor-dil" deviceset="4R-N" device="0603-ARV" value="220R"/>
 <part name="TOGGLE_LED" library="WS2812" deviceset="WS2812B" device=""/>
 <part name="SUPPLY20" library="supply2" deviceset="+5V" device=""/>
 <part name="SUPPLY21" library="supply2" deviceset="GND" device=""/>
@@ -17730,13 +17702,16 @@ Source: RS Component / Phycomp</description>
 <part name="SUPPLY25" library="supply2" deviceset="+5V" device=""/>
 <part name="JP1" library="SparkFun" deviceset="M09" device="LOCK-LONGPADS"/>
 <part name="JP2" library="SparkFun" deviceset="M09" device="LOCK-LONGPADS"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="R0805" value="220R"/>
+<part name="SUPPLY15" library="supply2" deviceset="+5V" device=""/>
+<part name="SUPPLY26" library="supply2" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="175.26" y="-66.04" size="5.08" layer="91">Connectors</text>
 <text x="-91.44" y="-106.68" size="5.08" layer="91">Value Indicator Bar</text>
-<text x="10.16" y="-223.52" size="5.08" layer="91">Capacitance</text>
+<text x="-15.24" y="-218.44" size="5.08" layer="91">Capacitance</text>
 <text x="58.42" y="66.04" size="5.08" layer="91">Encoders and Buttons</text>
 <text x="78.74" y="-106.68" size="2.54" layer="91">Wheel Light</text>
 <text x="-66.04" y="50.8" size="2.54" layer="91">Contrast Trimmer</text>
@@ -17746,6 +17721,8 @@ Source: RS Component / Phycomp</description>
 <text x="-198.12" y="-106.68" size="2.54" layer="91">Mode Indicator</text>
 <text x="-43.18" y="60.96" size="3.81" layer="91">Character LCD display, 16x2</text>
 <text x="-231.14" y="-106.68" size="2.54" layer="91">Toggle Indicator</text>
+<text x="-35.56" y="-2.54" size="1.778" layer="91">TODO: Control display backlight with QG, IR led with QH</text>
+<text x="-228.6" y="-96.52" size="1.778" layer="91">TODO: Do we need toggle indicator?  And toggle button?</text>
 </plain>
 <instances>
 <instance part="SW1" gate="G$1" x="73.66" y="38.1" rot="R270"/>
@@ -17769,21 +17746,13 @@ Source: RS Component / Phycomp</description>
 <instance part="C1" gate="G$1" x="-25.4" y="-238.76"/>
 <instance part="C2" gate="G$1" x="-10.16" y="-238.76"/>
 <instance part="C3" gate="G$1" x="5.08" y="-238.76"/>
-<instance part="C4" gate="G$1" x="20.32" y="-238.76"/>
-<instance part="C5" gate="G$1" x="35.56" y="-238.76"/>
-<instance part="C6" gate="G$1" x="50.8" y="-238.76"/>
-<instance part="C7" gate="G$1" x="66.04" y="-238.76"/>
-<instance part="C8" gate="G$1" x="81.28" y="-238.76"/>
-<instance part="SUPPLY45" gate="+5V" x="27.94" y="-233.68"/>
-<instance part="SUPPLY46" gate="GND" x="27.94" y="-246.38"/>
+<instance part="C7" gate="G$1" x="20.32" y="-238.76"/>
+<instance part="C8" gate="G$1" x="33.02" y="-238.76"/>
 <instance part="SUPPLY7" gate="GND" x="172.72" y="5.08" rot="R270"/>
 <instance part="SUPPLY48" gate="GND" x="149.86" y="-83.82" rot="R270"/>
 <instance part="SUPPLY49" gate="GND" x="241.3" y="-83.82" rot="R90"/>
 <instance part="R39" gate="G$1" x="193.04" y="78.74" rot="R90"/>
 <instance part="SUPPLY50" gate="GND" x="195.58" y="88.9" rot="R90"/>
-<instance part="C9" gate="G$1" x="96.52" y="-238.76"/>
-<instance part="SUPPLY26" gate="GND" x="81.28" y="-246.38"/>
-<instance part="SUPPLY54" gate="1" x="81.28" y="-233.68"/>
 <instance part="SUPPLY9" gate="+5V" x="149.86" y="-104.14" rot="R90"/>
 <instance part="SUPPLY47" gate="+5V" x="241.3" y="-104.14" rot="R270"/>
 <instance part="SUPPLY55" gate="+5V" x="-200.66" y="-45.72"/>
@@ -17848,7 +17817,6 @@ Source: RS Component / Phycomp</description>
 <instance part="RN3" gate="C" x="139.7" y="43.18" rot="R90"/>
 <instance part="RN3" gate="D" x="137.16" y="43.18" rot="R90"/>
 <instance part="SUPPLY8" gate="+5V" x="124.46" y="53.34"/>
-<instance part="RN1" gate="C" x="35.56" y="0" rot="R180"/>
 <instance part="TOGGLE_LED" gate="G$1" x="-220.98" y="-127" rot="R90"/>
 <instance part="SUPPLY20" gate="+5V" x="-226.06" y="-142.24" rot="R180"/>
 <instance part="SUPPLY21" gate="GND" x="-215.9" y="-142.24"/>
@@ -17861,6 +17829,9 @@ Source: RS Component / Phycomp</description>
 <instance part="SUPPLY25" gate="+5V" x="22.86" y="-142.24" rot="R180"/>
 <instance part="JP1" gate="G$1" x="187.96" y="-93.98" rot="R180"/>
 <instance part="JP2" gate="G$1" x="198.12" y="-93.98" rot="MR180"/>
+<instance part="R2" gate="G$1" x="35.56" y="0"/>
+<instance part="SUPPLY15" gate="+5V" x="5.08" y="-233.68"/>
+<instance part="SUPPLY26" gate="GND" x="5.08" y="-246.38"/>
 </instances>
 <busses>
 </busses>
@@ -17882,26 +17853,6 @@ Source: RS Component / Phycomp</description>
 <segment>
 <pinref part="LCD_SHIFT" gate="A" pin="SCL"/>
 <pinref part="SUPPLY35" gate="+5V" pin="+5V"/>
-</segment>
-<segment>
-<wire x1="-25.4" y1="-236.22" x2="-10.16" y2="-236.22" width="0.1524" layer="91"/>
-<wire x1="-10.16" y1="-236.22" x2="5.08" y2="-236.22" width="0.1524" layer="91"/>
-<wire x1="5.08" y1="-236.22" x2="20.32" y2="-236.22" width="0.1524" layer="91"/>
-<wire x1="20.32" y1="-236.22" x2="27.94" y2="-236.22" width="0.1524" layer="91"/>
-<wire x1="27.94" y1="-236.22" x2="35.56" y2="-236.22" width="0.1524" layer="91"/>
-<wire x1="35.56" y1="-236.22" x2="50.8" y2="-236.22" width="0.1524" layer="91"/>
-<junction x="-10.16" y="-236.22"/>
-<junction x="5.08" y="-236.22"/>
-<junction x="20.32" y="-236.22"/>
-<junction x="27.94" y="-236.22"/>
-<junction x="35.56" y="-236.22"/>
-<pinref part="C1" gate="G$1" pin="1"/>
-<pinref part="C2" gate="G$1" pin="1"/>
-<pinref part="C3" gate="G$1" pin="1"/>
-<pinref part="C4" gate="G$1" pin="1"/>
-<pinref part="SUPPLY45" gate="+5V" pin="+5V"/>
-<pinref part="C5" gate="G$1" pin="1"/>
-<pinref part="C6" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <wire x1="238.76" y1="-104.14" x2="208.28" y2="-104.14" width="0.1524" layer="91"/>
@@ -17994,8 +17945,8 @@ Source: RS Component / Phycomp</description>
 </segment>
 <segment>
 <pinref part="SUPPLY10" gate="+5V" pin="+5V"/>
-<pinref part="RN1" gate="C" pin="1"/>
 <wire x1="45.72" y1="0" x2="40.64" y2="0" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="TOGGLE_LED" gate="G$1" pin="VDD"/>
@@ -18014,6 +17965,21 @@ Source: RS Component / Phycomp</description>
 <pinref part="SUPPLY9" gate="+5V" pin="+5V"/>
 <wire x1="177.8" y1="-104.14" x2="152.4" y2="-104.14" width="0.1524" layer="91"/>
 <label x="154.94" y="-104.14" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="-25.4" y1="-236.22" x2="-10.16" y2="-236.22" width="0.1524" layer="91"/>
+<wire x1="-10.16" y1="-236.22" x2="5.08" y2="-236.22" width="0.1524" layer="91"/>
+<junction x="-10.16" y="-236.22"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<pinref part="C2" gate="G$1" pin="1"/>
+<pinref part="C3" gate="G$1" pin="1"/>
+<pinref part="C7" gate="G$1" pin="+"/>
+<wire x1="5.08" y1="-236.22" x2="20.32" y2="-236.22" width="0.1524" layer="91"/>
+<junction x="5.08" y="-236.22"/>
+<pinref part="C8" gate="G$1" pin="+"/>
+<wire x1="20.32" y1="-236.22" x2="33.02" y2="-236.22" width="0.1524" layer="91"/>
+<junction x="20.32" y="-236.22"/>
+<pinref part="SUPPLY15" gate="+5V" pin="+5V"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -18068,36 +18034,6 @@ Source: RS Component / Phycomp</description>
 <pinref part="R39" gate="G$1" pin="2"/>
 <pinref part="SUPPLY50" gate="GND" pin="GND"/>
 <wire x1="193.04" y1="88.9" x2="193.04" y2="83.82" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<wire x1="-25.4" y1="-243.84" x2="-10.16" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="-10.16" y1="-243.84" x2="5.08" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="5.08" y1="-243.84" x2="20.32" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="20.32" y1="-243.84" x2="27.94" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="27.94" y1="-243.84" x2="35.56" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="35.56" y1="-243.84" x2="38.1" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="35.56" y1="-243.84" x2="50.8" y2="-243.84" width="0.1524" layer="91"/>
-<junction x="-10.16" y="-243.84"/>
-<junction x="5.08" y="-243.84"/>
-<junction x="20.32" y="-243.84"/>
-<junction x="27.94" y="-243.84"/>
-<junction x="35.56" y="-243.84"/>
-<pinref part="C1" gate="G$1" pin="2"/>
-<pinref part="C2" gate="G$1" pin="2"/>
-<pinref part="C3" gate="G$1" pin="2"/>
-<pinref part="C4" gate="G$1" pin="2"/>
-<pinref part="SUPPLY46" gate="GND" pin="GND"/>
-<pinref part="C5" gate="G$1" pin="2"/>
-<pinref part="C6" gate="G$1" pin="2"/>
-</segment>
-<segment>
-<wire x1="81.28" y1="-243.84" x2="66.04" y2="-243.84" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="-243.84" x2="81.28" y2="-243.84" width="0.1524" layer="91"/>
-<junction x="81.28" y="-243.84"/>
-<pinref part="C7" gate="G$1" pin="-"/>
-<pinref part="C8" gate="G$1" pin="-"/>
-<pinref part="C9" gate="G$1" pin="2"/>
-<pinref part="SUPPLY26" gate="GND" pin="GND"/>
 </segment>
 <segment>
 <pinref part="SUPPLY56" gate="GND" pin="GND"/>
@@ -18186,6 +18122,21 @@ Source: RS Component / Phycomp</description>
 <segment>
 <pinref part="BAR10" gate="G$1" pin="VSS"/>
 <pinref part="SUPPLY23" gate="GND" pin="GND"/>
+</segment>
+<segment>
+<wire x1="-25.4" y1="-243.84" x2="-10.16" y2="-243.84" width="0.1524" layer="91"/>
+<wire x1="-10.16" y1="-243.84" x2="5.08" y2="-243.84" width="0.1524" layer="91"/>
+<junction x="-10.16" y="-243.84"/>
+<pinref part="C1" gate="G$1" pin="2"/>
+<pinref part="C2" gate="G$1" pin="2"/>
+<pinref part="C3" gate="G$1" pin="2"/>
+<pinref part="C7" gate="G$1" pin="-"/>
+<wire x1="5.08" y1="-243.84" x2="20.32" y2="-243.84" width="0.1524" layer="91"/>
+<junction x="5.08" y="-243.84"/>
+<pinref part="C8" gate="G$1" pin="-"/>
+<wire x1="20.32" y1="-243.84" x2="33.02" y2="-243.84" width="0.1524" layer="91"/>
+<junction x="20.32" y="-243.84"/>
+<pinref part="SUPPLY26" gate="GND" pin="GND"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -18457,17 +18408,6 @@ Source: RS Component / Phycomp</description>
 <pinref part="JP1" gate="G$1" pin="6"/>
 </segment>
 </net>
-<net name="LED_VOLTAGE" class="0">
-<segment>
-<wire x1="81.28" y1="-236.22" x2="66.04" y2="-236.22" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="-236.22" x2="81.28" y2="-236.22" width="0.1524" layer="91"/>
-<junction x="81.28" y="-236.22"/>
-<pinref part="C7" gate="G$1" pin="+"/>
-<pinref part="C8" gate="G$1" pin="+"/>
-<pinref part="C9" gate="G$1" pin="1"/>
-<pinref part="SUPPLY54" gate="1" pin="V+"/>
-</segment>
-</net>
 <net name="N$73" class="0">
 <segment>
 <pinref part="POWER_LED" gate="G$1" pin="A"/>
@@ -18588,8 +18528,8 @@ Source: RS Component / Phycomp</description>
 <net name="N$1" class="0">
 <segment>
 <pinref part="IR_1" gate="G$1" pin="A"/>
-<pinref part="RN1" gate="C" pin="2"/>
 <wire x1="25.4" y1="0" x2="30.48" y2="0" width="0.1524" layer="91"/>
+<pinref part="R2" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$9" class="0">

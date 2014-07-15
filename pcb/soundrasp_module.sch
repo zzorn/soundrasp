@@ -17672,7 +17672,6 @@ Source: RS Component / Phycomp</description>
 <part name="SUPPLY36" library="supply2" deviceset="GND" device=""/>
 <part name="SUPPLY41" library="supply2" deviceset="+5V" device=""/>
 <part name="SUPPLY58" library="supply2" deviceset="GND" device=""/>
-<part name="SUPPLY51" library="supply2" deviceset="GND" device=""/>
 <part name="SUPPLY52" library="supply2" deviceset="+5V" device=""/>
 <part name="IR_1" library="SparkFun-LED" deviceset="LED" device="3MM"/>
 <part name="IR_SENSE_1" library="opto-trans-siemens" deviceset="SFH205" device=""/>
@@ -17721,7 +17720,6 @@ Source: RS Component / Phycomp</description>
 <text x="-198.12" y="-106.68" size="2.54" layer="91">Mode Indicator</text>
 <text x="-43.18" y="60.96" size="3.81" layer="91">Character LCD display, 16x2</text>
 <text x="-231.14" y="-106.68" size="2.54" layer="91">Toggle Indicator</text>
-<text x="-35.56" y="-2.54" size="1.778" layer="91">TODO: Control display backlight with QG, IR led with QH</text>
 <text x="-228.6" y="-96.52" size="1.778" layer="91">TODO: Do we need toggle indicator?  And toggle button?</text>
 </plain>
 <instances>
@@ -17793,7 +17791,6 @@ Source: RS Component / Phycomp</description>
 <instance part="SUPPLY36" gate="GND" x="-27.94" y="20.32"/>
 <instance part="SUPPLY41" gate="+5V" x="-25.4" y="27.94" rot="R180"/>
 <instance part="SUPPLY58" gate="GND" x="-17.78" y="20.32"/>
-<instance part="SUPPLY51" gate="GND" x="10.16" y="12.7"/>
 <instance part="SUPPLY52" gate="+5V" x="7.62" y="20.32" rot="R180"/>
 <instance part="IR_1" gate="G$1" x="22.86" y="0" rot="R270"/>
 <instance part="IR_SENSE_1" gate="1" x="68.58" y="0" rot="R270"/>
@@ -18104,12 +18101,6 @@ Source: RS Component / Phycomp</description>
 <pinref part="SUPPLY19" gate="GND" pin="GND"/>
 <wire x1="58.42" y1="-76.2" x2="66.04" y2="-76.2" width="0.1524" layer="91"/>
 <pinref part="TOGGLE_SWITCH" gate="G$1" pin="1"/>
-</segment>
-<segment>
-<pinref part="DISPLAY" gate="G$1" pin="16"/>
-<pinref part="SUPPLY51" gate="GND" pin="GND"/>
-<wire x1="10.16" y1="15.24" x2="10.16" y2="45.72" width="0.1524" layer="91"/>
-<label x="10.16" y="30.48" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
 <pinref part="TOGGLE_LED" gate="G$1" pin="VSS"/>
@@ -18565,6 +18556,15 @@ Source: RS Component / Phycomp</description>
 <pinref part="MODE_LED" gate="G$1" pin="DO"/>
 <pinref part="BAR1" gate="G$1" pin="DI"/>
 <wire x1="-182.88" y1="-114.3" x2="-160.02" y2="-114.3" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$8" class="0">
+<segment>
+<pinref part="DISPLAY" gate="G$1" pin="16"/>
+<wire x1="10.16" y1="-2.54" x2="10.16" y2="45.72" width="0.1524" layer="91"/>
+<label x="10.16" y="30.48" size="1.778" layer="95" rot="R90"/>
+<pinref part="LCD_SHIFT" gate="A" pin="QH"/>
+<wire x1="-40.64" y1="-2.54" x2="10.16" y2="-2.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

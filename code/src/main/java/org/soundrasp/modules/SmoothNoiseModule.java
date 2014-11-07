@@ -43,7 +43,7 @@ public class SmoothNoiseModule extends ModuleBase {
 
 
     @Override
-    protected double calculateValue(double durationSeconds, long sampleCounter) {
+    protected double doUpdate(double durationSeconds, long sampleCounter) {
 
         // Update position in the noise
         currentPhase += durationSeconds * frequency.get();

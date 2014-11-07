@@ -38,6 +38,7 @@ public class ModuleTypeRepositoryImpl extends ServiceBase implements ModuleTypeR
     }
 
     protected void registerBuiltInModuleTypes() {
+        registerBuiltinModuleType("PatchModule", PatchModule.class);
         registerBuiltinModuleType("Sine Wave", SineModule.class);
         registerBuiltinModuleType("Smooth Noise", SmoothNoiseModule.class);
         registerBuiltinModuleType("White Noise", WhiteNoiseModule.class);

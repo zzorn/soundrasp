@@ -45,7 +45,7 @@ public class InertiaModule extends ModuleBase {
 
 
     @Override
-    protected double calculateValue(double durationSeconds, long sampleCounter) {
+    protected double doUpdate(double durationSeconds, long sampleCounter) {
         final double targetValue = target.get();
 
         // Determine braking amount

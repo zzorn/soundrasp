@@ -10,8 +10,10 @@ import java.util.Set;
 /**
  * Base class for modules.  Takes care of common functionality.
  */
+// TODO: Support output parameters as well?
 public abstract class ModuleBase implements Module {
 
+    // TODO: Make this configurable?
     private static final int LISTENER_UPDATE_SKIP = 1000;
 
     private int listenerUpdateStep = 0;
@@ -59,7 +61,7 @@ public abstract class ModuleBase implements Module {
 
     @Override
     public final void update(double durationSeconds, long sampleCounter) {
-        value = calculateValue(durationSeconds, sampleCounter);
+        value = doUpdate(durationSeconds, sampleCounter);
 
         // Notify listeners now and then
         if (listenerUpdateStep-- <= 0) {
@@ -68,17 +70,24 @@ public abstract class ModuleBase implements Module {
         }
     }
 
-    protected abstract double calculateValue(double durationSeconds, long sampleCounter);
-
     @Override
     public final double getValue() {
         return value;
     }
 
     /**
+     * Update the module and return the current value.
+     *
+     * @param durationSeconds seconds since the last update.
+     * @param sampleCounter the index number of the sample to calculate.
+     * @return the new value for the module.
+     */
+    protected abstract double doUpdate(double durationSeconds, long sampleCounter);
+
+    /**
      * Defines a parameter with no description and a zero default value for this module.
      *
-     * @param name user readable name of the parameter.  Should be 16 characters or shorter.
+     * @param name user readable name of the parameter.  Should be 16 characters or shorter if a hardware user interface is used.
      * @return the registered parameter.
      */
     protected Param param(String name) {
@@ -88,10 +97,10 @@ public abstract class ModuleBase implements Module {
     /**
      * Defines a parameter with no description for this module.
      *
-     * @param name user readable name of the parameter.  Should be 16 characters or shorter.
+     * @param name user readable name of the parameter.  Should be 16 characters or shorter if a hardware user interface is used.
      * @param defaultValue initial and default value for the parameter.
-     * @param minValue
-     * @param maxValue
+     * @param minValue minimum allowed value for the parameter
+     * @param maxValue maximum allowed value for the parameter
      * @return the registered parameter.
      */
     protected Param param(String name, double defaultValue, double minValue, double maxValue) {
@@ -101,11 +110,11 @@ public abstract class ModuleBase implements Module {
     /**
      * Defines a parameter for this module.
      *
-     * @param name user readable name of the parameter.  Should be 16 characters or shorter.
+     * @param name user readable name of the parameter.  Should be 16 characters or shorter if a hardware user interface is used.
      * @param description user readable description of the parameter.
      * @param defaultValue initial and default value for the parameter.
-     * @param minValue
-     * @param maxValue
+     * @param minValue minimum allowed value for the parameter
+     * @param maxValue maximum allowed value for the parameter
      * @return the registered parameter.
      */
     protected Param param(String name, String description, double defaultValue, double minValue, double maxValue) {
@@ -140,6 +149,18 @@ public abstract class ModuleBase implements Module {
     protected void notifyListenersValueChanged(long sampleCounter, double value) {
         for (ModuleListener listener : listeners) {
             listener.onValueChange(this, sampleCounter, value);
+        }
+    }
+
+    protected void notifyListenersConfigurationChanged() {
+        for (ModuleListener listener : listeners) {
+            listener.onConfigurationChanged(this);
+        }
+    }
+
+    protected void notifyListenersParameterChanged(Param param) {
+        for (ModuleListener listener : listeners) {
+            listener.onParameterChanged(this, param);
         }
     }
 }

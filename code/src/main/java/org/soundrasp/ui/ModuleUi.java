@@ -80,4 +80,14 @@ public class ModuleUi extends UiComponentBase implements ModuleListener {
     public void onValueChange(Module module, long sampleCounter, double value) {
         valueLabel.setText(String.format("%.2f", value));
     }
+
+    @Override public void onConfigurationChanged(Module module) {
+        // TODO: Implement
+
+    }
+
+    @Override public void onParameterChanged(Module module, Param changedParameter) {
+        // TODO: Implement
+
+    }
 }

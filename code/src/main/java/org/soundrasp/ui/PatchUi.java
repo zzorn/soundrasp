@@ -2,8 +2,8 @@ package org.soundrasp.ui;
 
 import net.miginfocom.swing.MigLayout;
 import org.flowutils.ui.UiComponentBase;
-import org.soundrasp.model.Patch;
-import org.soundrasp.model.Slot;
+import org.soundrasp.model.Module;
+import org.soundrasp.modules.PatchModule;
 
 import javax.swing.*;
 
@@ -11,18 +11,18 @@ import javax.swing.*;
  */
 public class PatchUi extends UiComponentBase {
 
-    private Patch patch;
+    private PatchModule patch;
     private JPanel panel;
 
-    public PatchUi(Patch patch) {
+    public PatchUi(PatchModule patch) {
         setPatch(patch);
     }
 
-    public Patch getPatch() {
+    public PatchModule getPatch() {
         return patch;
     }
 
-    public void setPatch(Patch patch) {
+    public void setPatch(PatchModule patch) {
         this.patch = patch;
 
         updateUi();
@@ -42,8 +42,8 @@ public class PatchUi extends UiComponentBase {
             panel.removeAll();
 
             if (patch != null) {
-                for (Slot slot : patch.getSlots()) {
-                    panel.add(new SlotUi(slot).getUi());
+                for (Module module: patch.getModules()) {
+                    panel.add(new ModuleUi(module).getUi());
                 }
             }
         }

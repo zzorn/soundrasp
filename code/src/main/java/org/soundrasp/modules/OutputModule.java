@@ -9,6 +9,7 @@ import static org.flowutils.MathUtils.*;
 /**
  * Outputs sound.
  */
+// TODO: Add support for multichannel outputs, so that we do not need to know about the output inside a module, and can just output data from a module
 public class OutputModule extends ModuleBase {
 
     public final Param centerChannel = param("Center Channel", "This channel is audible in both the left and right channels", 0, -1.0, 1.0);
@@ -26,7 +27,7 @@ public class OutputModule extends ModuleBase {
     }
 
     @Override
-    protected double calculateValue(double durationSeconds, long sampleCounter) {
+    protected double doUpdate(double durationSeconds, long sampleCounter) {
         double left =  centerChannel.get() * centerVolume.get() +
                        leftChannel.get() * leftVolume.get();
         double right = centerChannel.get() * centerVolume.get() +

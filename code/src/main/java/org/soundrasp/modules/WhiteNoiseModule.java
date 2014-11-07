@@ -48,7 +48,7 @@ public class WhiteNoiseModule extends ModuleBase {
 
 
     @Override
-    protected double calculateValue(double durationSeconds, long sampleCounter) {
+    protected double doUpdate(double durationSeconds, long sampleCounter) {
 
         // Update phase in the wave
         currentPhase += durationSeconds * frequency.get();

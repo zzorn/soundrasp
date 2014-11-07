@@ -3,12 +3,12 @@ package org.soundrasp;
 
 import org.flowutils.service.Service;
 import org.flowutils.ui.SimpleFrame;
-import org.soundrasp.model.Patch;
 import org.soundrasp.modules.*;
 import org.soundrasp.outputs.AudioOutput;
 import org.soundrasp.outputs.SignalOutput;
 import org.soundrasp.ui.PatchUi;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,48 +40,51 @@ public final class SoundRasp  {
             service.init();
         }
 
-        configureTestSynth();
+        final PatchModule patchModule = configureTestSynth();
 
         // Create UI
-        final PatchUi patchUi = new PatchUi(synth.getPatch());
-        SimpleFrame simpleFrame = new SimpleFrame("Sound Rasp", patchUi.getUi());
+        final PatchUi patchUi = new PatchUi(patchModule);
+        new SimpleFrame("Sound Rasp", patchUi.getUi());
 	}
 
-    private void configureTestSynth() {
-        final Patch patch = synth.getPatch();
+    private PatchModule configureTestSynth() {
+        PatchModule patch = new PatchModule();
+        synth.setModule(patch);
 
-        final WhiteNoiseModule melody = patch.addSlotWithModule(new WhiteNoiseModule(0.5, 100, 200));
+        final WhiteNoiseModule melody = patch.addModule(new WhiteNoiseModule(0.5, 100, 200));
 
-        final InertiaModule inertiaPitch = patch.addSlotWithModule(new InertiaModule(0.3, 0.01, 0.1, 0));
+        final InertiaModule inertiaPitch = patch.addModule(new InertiaModule(0.3, 0.01, 0.1, 0));
         inertiaPitch.target.set(melody);
 
-        final SineModule simpleMelody = patch.addSlotWithModule(new SineModule(220));
+        final SineModule simpleMelody = patch.addModule(new SineModule(220));
         simpleMelody.frequency.set(inertiaPitch);
 
-        final SineModule hfo = patch.addSlotWithModule(new SineModule(220));
-        final SineModule lfo = patch.addSlotWithModule(new SineModule(21));
-        final SineModule lfo2 = patch.addSlotWithModule(new SineModule(1.1, 0.7));
-        final SineModule vlfo = patch.addSlotWithModule(new SineModule(0.131, 1, 1.1));
-        final SineModule vlfo2 = patch.addSlotWithModule(new SineModule(0.13, 500, 500));
+        final SineModule hfo = patch.addModule(new SineModule(220));
+        final SineModule lfo = patch.addModule(new SineModule(21));
+        final SineModule lfo2 = patch.addModule(new SineModule(1.1, 0.7));
+        final SineModule vlfo = patch.addModule(new SineModule(0.131, 1, 1.1));
+        final SineModule vlfo2 = patch.addModule(new SineModule(0.13, 500, 500));
         hfo.amplitude.set(lfo);
         lfo.frequency.set(vlfo);
         hfo.frequency.set(vlfo2);
 
         inertiaPitch.attraction.set(vlfo);
 
-        final SmoothNoiseModule windAmp = patch.addSlotWithModule(new SmoothNoiseModule(0.1, 0.3, 0.8));
-        final SmoothNoiseModule windFreq = patch.addSlotWithModule(new SmoothNoiseModule(0.21, 300, 800));
-        final SmoothNoiseModule wind = patch.addSlotWithModule(new SmoothNoiseModule(400, 0.5, 0));
+        final SmoothNoiseModule windAmp = patch.addModule(new SmoothNoiseModule(0.1, 0.3, 0.8));
+        final SmoothNoiseModule windFreq = patch.addModule(new SmoothNoiseModule(0.21, 300, 800));
+        final SmoothNoiseModule wind = patch.addModule(new SmoothNoiseModule(400, 0.5, 0));
         wind.amplitude.set(windAmp);
         wind.frequency.set(windFreq);
 
 
-        final OutputModule outputModule = patch.addSlotWithModule(new OutputModule());
+        final OutputModule outputModule = patch.addModule(new OutputModule());
         outputModule.leftChannel.set(simpleMelody);
         outputModule.rightChannel.set(wind);
         outputModule.leftVolume.set(0.6);
         outputModule.rightVolume.set(0.8);
         outputModule.blendAmount.set(0.6);
+
+        return patch;
     }
 
     public void start() {

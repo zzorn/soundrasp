@@ -1,8 +1,11 @@
 package org.soundrasp.model;
 
+import org.flowutils.Check;
+
 /**
  * Describes a parameter used by a module.
  */
+// TODO: Store information on whether the value range for the parameter is logarithmic
 public final class Param {
 
     private final String name;
@@ -17,6 +20,11 @@ public final class Param {
     private ParamListener listener;
 
     public Param(String name, String description, double defaultValue, double minValue, double maxValue) {
+        Check.nonEmptyString(name, "name");
+        Check.normalNumber(defaultValue, "defaultValue");
+        Check.normalNumber(minValue, "minValue");
+        Check.normalNumber(maxValue, "maxValue");
+
         this.name = name;
         this.description = description;
         this.defaultValue = defaultValue;
